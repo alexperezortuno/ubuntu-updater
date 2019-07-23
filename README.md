@@ -12,9 +12,10 @@ $ ./install.sh
 $ updater <command-option>
 ```
 
-## List of options  
+## List of options
+| Option | Description |
+|--|--|  
 | -- | Without parameters Update list of packages, upgrade and clean cache  |
-|--|--|
 | list | List available commands |
 | clean | Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository |
 | package:install | Install package in the current machine |
