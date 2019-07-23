@@ -74,18 +74,28 @@ case "$PARAM_1" in
         echo "${Red}Please tell me what package you need to see${RCol}\n";
       fi
     ;;
+    "package:download")
+      if [ "$PARAM_2" != "" ]
+      then
+        sudo apt-get --download-only source $PARAM_2
+      else
+        echo "${Red}Please tell me what package needs to download${RCol}\n";
+      fi
+    ;;
     "cache:stats")
       apt-cache stats
     ;;
     "list")
       echo "\t";
       echo "${Gre}Without parameters${RCol}\t${Yel}Update list of packages, upgrade and clean cache${RCol}\r";
+      echo "${Gre}list${RCol}\t${Yel}List available commands${RCol}\r";
       echo "${Gre}clean${RCol}\t\t\t${Yel}Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository. ${RCol}\n";
       echo "${Gre}package:install\t${RCol}\t${Yel}Install package in the current machine${RCol}\r";
       echo "${Gre}package:installed${RCol}\t${Yel}List all installed packages in the current machine${RCol}\r";
       echo "${Gre}package:upgrade${RCol}\t\t${Yel}Only upgrade specific package in the current machine${RCol}\r";
       echo "${Gre}package:remove${RCol}\t\t${Yel}Remove specific package${RCol}\r";
       echo "${Gre}package:find${RCol}\t\t${Yel}Find specific package${RCol}\r";
+      echo "${Gre}package:download${RCol}\t${Yel}To download only source code of particular package${RCol}\r";
       echo "${Gre}package:dependencies${RCol}\t${Yel}Check the dependencies for particular software packages. whether those dependencies packages are installed or not${RCol}\r";
       echo "${Gre}package:description${RCol}\t${Yel}Get description by a specific package${RCol}\r";
       echo "${Gre}package:descriptions${RCol}\t${Yel}List all packages with your description${RCol}\n";
