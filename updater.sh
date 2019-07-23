@@ -88,6 +88,7 @@ case "$PARAM_1" in
     "list")
       echo "\t";
       echo "${Gre}Without parameters${RCol}\t${Yel}Update list of packages, upgrade and clean cache${RCol}\r";
+      echo "${Gre}list${RCol}\t${Yel}List available commands${RCol}\r";
       echo "${Gre}clean${RCol}\t\t\t${Yel}Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository. ${RCol}\n";
       echo "${Gre}package:install\t${RCol}\t${Yel}Install package in the current machine${RCol}\r";
       echo "${Gre}package:installed${RCol}\t${Yel}List all installed packages in the current machine${RCol}\r";
