@@ -36,7 +36,7 @@ case "$PARAM_1" in
         echo "${Red}Please tell me what package you need information${RCol}\n";
       fi
     ;;
-    "package:installed")
+    "package:list")
       sudo apt list --installed | less
     ;;
     "package:find")
@@ -91,7 +91,7 @@ case "$PARAM_1" in
       echo "${Gre}list${RCol}\t${Yel}List available commands${RCol}\r";
       echo "${Gre}clean${RCol}\t\t\t${Yel}Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository. ${RCol}\n";
       echo "${Gre}package:install\t${RCol}\t${Yel}Install package in the current machine${RCol}\r";
-      echo "${Gre}package:installed${RCol}\t${Yel}List all installed packages in the current machine${RCol}\r";
+      echo "${Gre}package:list${RCol}\t${Yel}List all installed packages in the current machine${RCol}\r";
       echo "${Gre}package:upgrade${RCol}\t\t${Yel}Only upgrade specific package in the current machine${RCol}\r";
       echo "${Gre}package:remove${RCol}\t\t${Yel}Remove specific package${RCol}\r";
       echo "${Gre}package:find${RCol}\t\t${Yel}Find specific package${RCol}\r";
