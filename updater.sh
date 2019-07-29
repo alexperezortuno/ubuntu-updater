@@ -11,9 +11,9 @@ Divider='==============================================================';
 
 case "$PARAM_1" in
     "clean")
-      echo -e "${Yel}";
+      echo "${Yel}";
       sudo apt autoremove && sudo apt clean && sudo apt autoclean
-      echo -e "${RCol}";
+      echo "${RCol}";
     ;;
     "package:remove")
       if [ "$PARAM_2" != "" ]
@@ -102,7 +102,7 @@ case "$PARAM_1" in
       echo "${Gre}cache:stats${RCol}\t\t${Yel}Display overall statistics about the cache${RCol}\r";
     ;;
     *)
-      echo -e "${Yel} Updating packages ${RCol}";
+      echo "${Yel} Updating packages ${RCol}";
       sudo apt update && apt list --upgradable && sudo apt upgrade -y && sudo apt autoremove && sudo apt clean && sudo apt autoclean
     ;;
 esac
