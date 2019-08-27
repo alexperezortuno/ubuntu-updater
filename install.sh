@@ -12,7 +12,7 @@ removed_string=${SOURCE//$PREFIX/}
 
 function alias_installer() {
     echo -e "${Yel} Set new alias ${RCol}\n"
-    echo "alias updater='sudo sh ${removed_string}/updater.sh'" >> ~/.bashrc
+    echo "alias updater='sudo ${removed_string}/./updater.sh'" >> ~/.bashrc
     echo -e "${Gre} Alias set successfully ${RCol}\n"
 }
 
