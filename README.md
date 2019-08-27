@@ -19,7 +19,7 @@ $ updater <command-option>
 | list | List available commands |
 | clean | Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository |
 | package:install | Install package in the current machine |
-| package:installed | List all installed packages in the current machine |
+| package:list | List all installed packages in the current machine |
 | package:upgrade | Only upgrade specific package in the current machine |
 | package:remove | Remove specific package |
 | package:find |  Find specific package |
