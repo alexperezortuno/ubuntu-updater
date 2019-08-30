@@ -3,8 +3,8 @@ This script compiles a list of useful commands for Ubuntu, this install, remove,
 
 ## Install
 ```
-$ chmod +x install.sh
-$ ./install.sh
+$ sudo chmod +x install
+$ ./install
 ```
 
 ## Running commands
