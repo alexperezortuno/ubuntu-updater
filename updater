@@ -20,6 +20,8 @@ case "$PARAM_1" in
       then
         echo -e "${Yel}Removing package ${PARAM_2}${RCol}\n";
         sudo apt remove --purge $PARAM_2
+        sudo apt autoremove
+        sudo apt clean
       else
         echo -e "${Yel}Please tell me what package you want to remove${RCol}\n";
       fi
@@ -81,6 +83,9 @@ case "$PARAM_1" in
       else
         echo -e "${Red}Please tell me what package needs to download${RCol}\n";
       fi
+    ;;
+    "package:list")
+      dpkg --list
     ;;
     "cache:stats")
       apt-cache stats
