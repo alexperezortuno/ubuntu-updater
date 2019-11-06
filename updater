@@ -90,6 +90,17 @@ case "$PARAM_1" in
     "cache:stats")
       apt-cache stats
     ;;
+    "killport")
+        echo -e "${Yel}Please write port to kill:  ${RCol}\r"
+        read PORT
+        kill -9 $(lsof -t -i:${PORT})
+    ;;
+    "freemem")
+        free -h
+        su -c "echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'" root
+        # echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'
+        free -h
+    ;;
     "list")
       echo "\t";
       echo -e "${Gre}Without parameters${RCol}\t${Yel}Update list of packages, upgrade and clean cache${RCol}\r";
