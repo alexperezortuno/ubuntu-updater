@@ -87,6 +87,27 @@ case "$PARAM_1" in
     "package:list")
       dpkg --list
     ;;
+    "ppa:list")
+      apt policy
+    ;;
+    "ppa:install")
+        if [[ "$PARAM_2" != "" ]]
+        then
+            sudo add-apt-repository ppa:$PARAM_2 -y
+            sudo apt update
+        else
+            echo -e "${Red}Please need a PPA ${RCol}\n";
+        fi
+    ;;
+    "ppa:remove")
+        if [[ "$PARAM_2" != "" ]]
+        then
+            sudo add-apt-repository --remove ppa:$PARAM_2 -y
+            sudo apt update
+        else
+            echo -e "${Red}Please tell me what ppa needs remove${RCol}\n";
+        fi
+    ;;
     "cache:stats")
       apt-cache stats
     ;;
