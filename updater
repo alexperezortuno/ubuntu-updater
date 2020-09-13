@@ -111,6 +111,15 @@ case "$PARAM_1" in
     "cache:stats")
       apt-cache stats
     ;;
+    "memory:info")
+      if [[ "$PARAM_2" != "" ]]
+      then
+        sudo dmidecode --type 17 | more
+      else
+        # sudo dmidecode --type 17
+        sudo dmidecode --type 17  | grep -i speed
+      fi
+    ;;
     "killport")
         echo -e "${Yel}Please write port to kill:  ${RCol}\r"
         read PORT
