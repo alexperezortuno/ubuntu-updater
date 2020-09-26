@@ -117,6 +117,7 @@ case "$PARAM_1" in
         sudo dmidecode --type 17 | more
       else
         # sudo dmidecode --type 17
+        # sudo lshw -short -C memory
         sudo dmidecode --type 17  | grep -i speed
       fi
     ;;
