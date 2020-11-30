@@ -20,6 +20,8 @@ case "$PARAM_1" in
       then
         echo -e "${Yel}Removing package ${PARAM_2}${RCol}\n";
         sudo apt remove --purge $PARAM_2
+        sudo apt autoremove
+        sudo apt clean
       else
         echo -e "${Yel}Please tell me what package you want to remove${RCol}\n";
       fi
@@ -82,8 +84,53 @@ case "$PARAM_1" in
         echo -e "${Red}Please tell me what package needs to download${RCol}\n";
       fi
     ;;
+    "package:list")
+      dpkg --list
+    ;;
+    "ppa:list")
+      apt policy
+    ;;
+    "ppa:install")
+        if [[ "$PARAM_2" != "" ]]
+        then
+            sudo add-apt-repository ppa:$PARAM_2 -y
+            sudo apt update
+        else
+            echo -e "${Red}Please need a PPA ${RCol}\n";
+        fi
+    ;;
+    "ppa:remove")
+        if [[ "$PARAM_2" != "" ]]
+        then
+            sudo add-apt-repository --remove ppa:$PARAM_2 -y
+            sudo apt update
+        else
+            echo -e "${Red}Please tell me what ppa needs remove${RCol}\n";
+        fi
+    ;;
     "cache:stats")
       apt-cache stats
+    ;;
+    "memory:info")
+      if [[ "$PARAM_2" != "" ]]
+      then
+        sudo dmidecode --type 17 | more
+      else
+        # sudo dmidecode --type 17
+        # sudo lshw -short -C memory
+        sudo dmidecode --type 17  | grep -i speed
+      fi
+    ;;
+    "killport")
+        echo -e "${Yel}Please write port to kill:  ${RCol}\r"
+        read PORT
+        kill -9 $(lsof -t -i:${PORT})
+    ;;
+    "freemem")
+        free -h
+        su -c "echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'" root
+        # echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'
+        free -h
     ;;
     "list")
       echo "\t";
