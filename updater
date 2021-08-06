@@ -124,7 +124,7 @@ case "$PARAM_1" in
     "killport")
         echo -e "${Yel}Please write port to kill:  ${RCol}\r"
         read PORT
-        kill -9 $(lsof -t -i:${PORT})
+        sudo kill -9 $(sudo lsof -t -i:${PORT})
     ;;
     "freemem")
         free -h
@@ -133,9 +133,8 @@ case "$PARAM_1" in
         free -h
     ;;
     "list")
-      echo "\t";
       echo -e "${Gre}Without parameters${RCol}\t${Yel}Update list of packages, upgrade and clean cache${RCol}\r";
-      echo -e "${Gre}list${RCol}\t${Yel}List available commands${RCol}\r";
+      echo -e "${Gre}list${RCol}\t\t\t${Yel}List available commands${RCol}\r";
       echo -e "${Gre}clean${RCol}\t\t\t${Yel}Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository. ${RCol}\n";
       echo -e "${Gre}package:install\t${RCol}\t${Yel}Install package in the current machine${RCol}\r";
       echo -e "${Gre}pacsudo age:installed${RCol}\t${Yel}List all installed packages in the current machine${RCol}\r";
@@ -146,7 +145,13 @@ case "$PARAM_1" in
       echo -e "${Gre}package:dependencies${RCol}\t${Yel}Check the dependencies for particular software packages. whether those dependencies packages are installed or not${RCol}\r";
       echo -e "${Gre}package:description${RCol}\t${Yel}Get description by a specific package${RCol}\r";
       echo -e "${Gre}package:descriptions${RCol}\t${Yel}List all packages with your description${RCol}\n";
+      echo -e "${Gre}ppa:list${RCol}\t\t${Yel}List policy${RCol}\r";
+      echo -e "${Gre}ppa:install${RCol}\t\t${Yel}Install${RCol}\r";
+      echo -e "${Gre}ppa:remove${RCol}\t\t${Yel}Remove${RCol}\n";
       echo -e "${Gre}cache:stats${RCol}\t\t${Yel}Display overall statistics about the cache${RCol}\r";
+      echo -e "${Gre}memory:info${RCol}\t\t${Yel}mem info${RCol}\r";
+      echo -e "${Gre}killport${RCol}\t\t${Yel}Killport${RCol}\r";
+      echo -e "${Gre}freemem${RCol}\t\t\t${Yel}Free memory${RCol}\r";
     ;;
     *)
       echo -e "${Yel} Updating packages ${RCol}";
