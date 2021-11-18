@@ -2,12 +2,10 @@
 
 PARAM_1=$1
 PARAM_2=$2
-PARAM_3=$3
 RCol='\e[0m';
 Yel='\e[0;33m';
 Red='\e[0;31m';
 Gre='\e[0;32m';
-Divider='==============================================================';
 
 case "$PARAM_1" in
     "clean")
@@ -19,7 +17,7 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Removing package ${PARAM_2}${RCol}\n";
-        sudo apt remove --purge $PARAM_2
+        sudo apt remove --purge "$PARAM_2"
         sudo apt autoremove
         sudo apt clean
       else
@@ -27,13 +25,13 @@ case "$PARAM_1" in
       fi
     ;;
     "package:install")
-      sudo apt install ${PARAM_2}
+      sudo apt install "${PARAM_2}"
     ;;
     "package:upgrade")
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Installing package ${PARAM_2}${RCol}\n";
-        sudo apt install $PARAM_2 --only-upgrade
+        sudo apt install "$PARAM_2" --only-upgrade
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
       fi
@@ -45,7 +43,7 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
-        sudo apt list --installed | grep -i $PARAM_2
+        sudo apt list --installed | grep -i "$PARAM_2"
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
       fi
@@ -54,7 +52,7 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
-        apt-cache show $PARAM_2 | less
+        apt-cache show "$PARAM_2" | less
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
       fi
@@ -63,7 +61,7 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
-        apt-cache search $PARAM_2 | less
+        apt-cache search "$PARAM_2" | less
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
       fi
@@ -71,7 +69,7 @@ case "$PARAM_1" in
     "package:dependencies")
       if [[ "$PARAM_2" != "" ]]
       then
-        apt-cache showpkg $PARAM_2 | less
+        apt-cache showpkg "$PARAM_2" | less
       else
         echo -e "${Red}Please tell me what package you need to see${RCol}\n";
       fi
@@ -79,7 +77,7 @@ case "$PARAM_1" in
     "package:download")
       if [[ "$PARAM_2" != "" ]]
       then
-        sudo apt-get --download-only source $PARAM_2
+        sudo apt-get --download-only source "$PARAM_2"
       else
         echo -e "${Red}Please tell me what package needs to download${RCol}\n";
       fi
@@ -93,7 +91,7 @@ case "$PARAM_1" in
     "ppa:install")
         if [[ "$PARAM_2" != "" ]]
         then
-            sudo add-apt-repository ppa:$PARAM_2 -y
+            sudo add-apt-repository ppa:"$PARAM_2" -y
             sudo apt update
         else
             echo -e "${Red}Please need a PPA ${RCol}\n";
@@ -102,7 +100,7 @@ case "$PARAM_1" in
     "ppa:remove")
         if [[ "$PARAM_2" != "" ]]
         then
-            sudo add-apt-repository --remove ppa:$PARAM_2 -y
+            sudo add-apt-repository --remove ppa:"$PARAM_2" -y
             sudo apt update
         else
             echo -e "${Red}Please tell me what ppa needs remove${RCol}\n";
@@ -123,8 +121,8 @@ case "$PARAM_1" in
     ;;
     "killport")
         echo -e "${Yel}Please write port to kill:  ${RCol}\r"
-        read PORT
-        sudo kill -9 $(sudo lsof -t -i:${PORT})
+        read -r PORT
+        sudo kill -9 "$(sudo lsof -t -i:"${PORT}")"
     ;;
     "freemem")
         free -h
