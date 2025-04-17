@@ -7,6 +7,67 @@ Yel='\e[0;33m';
 Red='\e[0;31m';
 Gre='\e[0;32m';
 
+# Función mejorada para --help
+show_help() {
+  cat << EOF
+🔹 Ubuntu/Debian Updater 🔹
+Automates system updates, upgrades, and cleanup tasks.
+
+📌 Usage:
+  ./updater [OPTION]
+
+🛠️ Options:
+  -u, --update           Update package lists (apt update).
+  -g, --upgrade          Upgrade installed packages (apt upgrade -y).
+  -a, --autoremove       Remove unused packages (apt autoremove -y).
+  -c, --clean            Clean package cache (apt clean).
+  -f, --full             Perform all actions: update, upgrade, autoremove, and clean.
+  -h, --help             Show this help message.
+  -v, --version          Show script version.
+
+📋 Examples:
+  ./updater --full       # Full system update + upgrade + cleanup.
+  ./updater --update     # Only update package lists.
+  ./updater -ug          # Update and upgrade (no cleanup).
+
+🔗 Repository: https://github.com/alexperezortuno/ubuntu-updater
+EOF
+}
+
+show_commands() {
+    cat << EOF
+    📚 Available Commands
+
+    🔧 System Maintenance
+    (no args)   Update, upgrade and clean all
+    clean       Clean downloaded .deb packages from cache
+    cache:stats Show cache statistics
+
+    📦 Package Management
+    package:install <pkg>      Install a package
+    package:installed          List installed packages
+    package:upgrade <pkg>      Upgrade specific package
+    package:remove <pkg>       Remove a package
+    package:find <pkg>         Search for a package
+    package:download <pkg>     Download package source code
+    package:dependencies <pkg> Check package dependencies
+    package:description <pkg>  Show package description
+    package:descriptions       List all packages with descriptions
+
+    🔄 PPA Management$
+    ppa:list          List configured PPAs
+    ppa:install <ppa> Add a PPA
+    ppa:remove <ppa>  Remove a PPA
+
+    💾 Memory Management$
+    memory:info     Show memory information
+    freemem         Free up memory
+    killport <port> Kill process using a port
+
+    💡 Tip: Replace <pkg> with package name and <ppa> with PPA path
+EOF
+}
+
 case "$PARAM_1" in
     "clean")
       echo -e "${Yel}";
@@ -22,6 +83,7 @@ case "$PARAM_1" in
         sudo apt clean
       else
         echo -e "${Yel}Please tell me what package you want to remove${RCol}\n";
+        exit 1
       fi
     ;;
     "package:install")
@@ -34,6 +96,7 @@ case "$PARAM_1" in
         sudo apt install "$PARAM_2" --only-upgrade
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
+        exit 1
       fi
     ;;
     "package:installed")
@@ -46,6 +109,7 @@ case "$PARAM_1" in
         sudo apt list --installed | grep -i "$PARAM_2"
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
+        exit 1
       fi
     ;;
     "package:description")
@@ -55,6 +119,7 @@ case "$PARAM_1" in
         apt-cache show "$PARAM_2" | less
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
+        exit 1
       fi
     ;;
     "package:descriptions")
@@ -64,6 +129,7 @@ case "$PARAM_1" in
         apt-cache search "$PARAM_2" | less
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
+        exit 1
       fi
     ;;
     "package:dependencies")
@@ -72,6 +138,7 @@ case "$PARAM_1" in
         apt-cache showpkg "$PARAM_2" | less
       else
         echo -e "${Red}Please tell me what package you need to see${RCol}\n";
+        exit 1
       fi
     ;;
     "package:download")
@@ -80,6 +147,7 @@ case "$PARAM_1" in
         sudo apt-get --download-only source "$PARAM_2"
       else
         echo -e "${Red}Please tell me what package needs to download${RCol}\n";
+        exit 1
       fi
     ;;
     "package:list")
@@ -95,6 +163,7 @@ case "$PARAM_1" in
             sudo apt update
         else
             echo -e "${Red}Please need a PPA ${RCol}\n";
+            exit 1
         fi
     ;;
     "ppa:remove")
@@ -104,6 +173,7 @@ case "$PARAM_1" in
             sudo apt update
         else
             echo -e "${Red}Please tell me what ppa needs remove${RCol}\n";
+            exit 1
         fi
     ;;
     "cache:stats")
@@ -130,26 +200,11 @@ case "$PARAM_1" in
         # echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'
         free -h
     ;;
-    "list")
-      echo -e "${Gre}Without parameters${RCol}\t${Yel}Update list of packages, upgrade and clean cache${RCol}\r";
-      echo -e "${Gre}list${RCol}\t\t\t${Yel}List available commands${RCol}\r";
-      echo -e "${Gre}clean${RCol}\t\t\t${Yel}Used to free up the disk space by cleaning retrieved (downloaded) .deb files (packages) from the local repository. ${RCol}\n";
-      echo -e "${Gre}package:install\t${RCol}\t${Yel}Install package in the current machine${RCol}\r";
-      echo -e "${Gre}pacsudo age:installed${RCol}\t${Yel}List all installed packages in the current machine${RCol}\r";
-      echo -e "${Gre}package:upgrade${RCol}\t\t${Yel}Only upgrade specific package in the current machine${RCol}\r";
-      echo -e "${Gre}package:remove${RCol}\t\t${Yel}Remove specific package${RCol}\r";
-      echo -e "${Gre}package:find${RCol}\t\t${Yel}Find specific package${RCol}\r";
-      echo -e "${Gre}package:download${RCol}\t${Yel}To download only source code of particular package${RCol}\r";
-      echo -e "${Gre}package:dependencies${RCol}\t${Yel}Check the dependencies for particular software packages. whether those dependencies packages are installed or not${RCol}\r";
-      echo -e "${Gre}package:description${RCol}\t${Yel}Get description by a specific package${RCol}\r";
-      echo -e "${Gre}package:descriptions${RCol}\t${Yel}List all packages with your description${RCol}\n";
-      echo -e "${Gre}ppa:list${RCol}\t\t${Yel}List policy${RCol}\r";
-      echo -e "${Gre}ppa:install${RCol}\t\t${Yel}Install${RCol}\r";
-      echo -e "${Gre}ppa:remove${RCol}\t\t${Yel}Remove${RCol}\n";
-      echo -e "${Gre}cache:stats${RCol}\t\t${Yel}Display overall statistics about the cache${RCol}\r";
-      echo -e "${Gre}memory:info${RCol}\t\t${Yel}mem info${RCol}\r";
-      echo -e "${Gre}killport${RCol}\t\t${Yel}Killport${RCol}\r";
-      echo -e "${Gre}freemem${RCol}\t\t\t${Yel}Free memory${RCol}\r";
+    -h|--help)
+        show_help
+    ;;
+    -l|--list)
+      show_commands
     ;;
     *)
       echo -e "${Yel} Updating packages ${RCol}";
@@ -157,4 +212,4 @@ case "$PARAM_1" in
     ;;
 esac
 
-exit 1;
+exit 0
