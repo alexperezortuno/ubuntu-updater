@@ -42,8 +42,8 @@ show_commands() {
 
     🔄 PPA Management
     ppa:list          List configured PPAs
-    ppa:install <ppa> Add a PPA
-    ppa:remove <ppa>  Remove a PPA
+    ppa:install [PPA] Add a PPA
+    ppa:remove [PPA]  Remove a PPA
 
     💾 Memory Management
     freemem         Free up memory
@@ -63,7 +63,7 @@ show_commands() {
     service-list          List active services
     service-restart <srv> Restart a service
 
-    💡 Tip: Replace [PACKAGE] with package name and <ppa> with PPA path
+    💡 Tip: Replace [PACKAGE] with package name and [PPA] with PPA path
     🔗 Repository: https://github.com/alexperezortuno/ubuntu-updater
 EOF
 }
