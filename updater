@@ -7,39 +7,23 @@ Yel='\e[0;33m';
 Red='\e[0;31m';
 Gre='\e[0;32m';
 
-# Función mejorada para --help
-show_help() {
-  cat << EOF
-🔹 Ubuntu/Debian Updater 🔹
-Automates system updates, upgrades, and cleanup tasks.
-
-📌 Usage:
-  ./updater [OPTION]
-
-🛠️ Options:
-  -u, --update           Update package lists (apt update).
-  -g, --upgrade          Upgrade installed packages (apt upgrade -y).
-  -a, --autoremove       Remove unused packages (apt autoremove -y).
-  -c, --clean            Clean package cache (apt clean).
-  -f, --full             Perform all actions: update, upgrade, autoremove, and clean.
-  -h, --help             Show this help message.
-  -v, --version          Show script version.
-
-📋 Examples:
-  ./updater --full       # Full system update + upgrade + cleanup.
-  ./updater --update     # Only update package lists.
-  ./updater -ug          # Update and upgrade (no cleanup).
-
-🔗 Repository: https://github.com/alexperezortuno/ubuntu-updater
-EOF
-}
-
 show_commands() {
     cat << EOF
-    📚 Available Commands
+    🔹 Ubuntu/Debian Updater 🔹
+    Automates system updates, upgrades, and cleanup tasks.
+
+    📌 Usage:
+      updater [OPTION]
+
+    🛠️ Options:
+      -h, --help             Show this help message.
+      -v, --version          Show script version.
 
     🔧 System Maintenance
     (no args)   Update, upgrade and clean all
+
+    📚 Available options
+
     clean       Clean downloaded .deb packages from cache
     cache:stats Show cache statistics
 
@@ -54,25 +38,31 @@ show_commands() {
     package:description <pkg>  Show package description
     package:descriptions       List all packages with descriptions
 
-    🔄 PPA Management$
+    🔄 PPA Management
     ppa:list          List configured PPAs
     ppa:install <ppa> Add a PPA
     ppa:remove <ppa>  Remove a PPA
 
-    💾 Memory Management$
+    💾 Memory Management
     memory:info     Show memory information
     freemem         Free up memory
     killport <port> Kill process using a port
 
     💡 Tip: Replace <pkg> with package name and <ppa> with PPA path
+    🔗 Repository: https://github.com/alexperezortuno/ubuntu-updater
 EOF
 }
 
 case "$PARAM_1" in
+    -v|--version)
+        echo -e "${Yel}Version 1.0.0${RCol}\n";
+        exit 0
+    ;;
     "clean")
       echo -e "${Yel}";
       sudo apt autoremove; sudo apt clean; sudo apt autoclean
       echo -e "${RCol}";
+      exit 0
     ;;
     "package:remove")
       if [[ "$PARAM_2" != "" ]]
@@ -81,6 +71,7 @@ case "$PARAM_1" in
         sudo apt remove --purge "$PARAM_2"
         sudo apt autoremove
         sudo apt clean
+        exit 0
       else
         echo -e "${Yel}Please tell me what package you want to remove${RCol}\n";
         exit 1
@@ -88,12 +79,14 @@ case "$PARAM_1" in
     ;;
     "package:install")
       sudo apt install "${PARAM_2}"
+      exit 0
     ;;
     "package:upgrade")
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Installing package ${PARAM_2}${RCol}\n";
         sudo apt install "$PARAM_2" --only-upgrade
+        exit 0
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
         exit 1
@@ -101,12 +94,14 @@ case "$PARAM_1" in
     ;;
     "package:installed")
       sudo apt list --installed | less
+      exit 0
     ;;
     "package:find")
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
         sudo apt list --installed | grep -i "$PARAM_2"
+        exit 0
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
         exit 1
@@ -117,6 +112,7 @@ case "$PARAM_1" in
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
         apt-cache show "$PARAM_2" | less
+        exit 0
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
         exit 1
@@ -127,6 +123,7 @@ case "$PARAM_1" in
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
         apt-cache search "$PARAM_2" | less
+        exit 0
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
         exit 1
@@ -136,6 +133,7 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         apt-cache showpkg "$PARAM_2" | less
+        exit 0
       else
         echo -e "${Red}Please tell me what package you need to see${RCol}\n";
         exit 1
@@ -145,6 +143,7 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         sudo apt-get --download-only source "$PARAM_2"
+        exit 0
       else
         echo -e "${Red}Please tell me what package needs to download${RCol}\n";
         exit 1
@@ -152,15 +151,18 @@ case "$PARAM_1" in
     ;;
     "package:list")
       dpkg --list
+      exit 0
     ;;
     "ppa:list")
       apt policy
+      exit 0
     ;;
     "ppa:install")
         if [[ "$PARAM_2" != "" ]]
         then
             sudo add-apt-repository ppa:"$PARAM_2" -y
             sudo apt update
+            exit 0
         else
             echo -e "${Red}Please need a PPA ${RCol}\n";
             exit 1
@@ -171,6 +173,7 @@ case "$PARAM_1" in
         then
             sudo add-apt-repository --remove ppa:"$PARAM_2" -y
             sudo apt update
+            exit 0
         else
             echo -e "${Red}Please tell me what ppa needs remove${RCol}\n";
             exit 1
@@ -178,6 +181,7 @@ case "$PARAM_1" in
     ;;
     "cache:stats")
       apt-cache stats
+      exit 0
     ;;
     "memory:info")
       if [[ "$PARAM_2" != "" ]]
@@ -188,28 +192,28 @@ case "$PARAM_1" in
         # sudo lshw -short -C memory
         sudo dmidecode --type 17  | grep -i speed
       fi
+      exit 0
     ;;
     "killport")
         echo -e "${Yel}Please write port to kill:  ${RCol}\r"
         read -r PORT
         sudo kill -9 "$(sudo lsof -t -i:"${PORT}")"
+        exit 0
     ;;
     "freemem")
         free -h
         su -c "echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'" root
         # echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'
         free -h
+        exit 0
     ;;
     -h|--help)
-        show_help
-    ;;
-    -l|--list)
-      show_commands
+        show_commands
+        exit 0
     ;;
     *)
       echo -e "${Yel} Updating packages ${RCol}";
       sudo apt update; apt list --upgradable && sudo apt upgrade -y && sudo apt autoremove; sudo apt clean; sudo apt autoclean
+      exit 0
     ;;
 esac
-
-exit 0
