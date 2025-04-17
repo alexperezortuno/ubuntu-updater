@@ -2,10 +2,12 @@
 
 PARAM_1=$1
 PARAM_2=$2
-RCol='\e[0m';
-Yel='\e[0;33m';
-Red='\e[0;31m';
-Gre='\e[0;32m';
+# Colors
+RCol='\033[0m'    # Text Reset
+Red='\033[0;31m'  # Red
+Gre='\033[0;32m'  # Green
+Yel='\033[0;33m'  # Yellow
+Blu='\033[0;34m'  # Blue
 
 show_commands() {
     cat << EOF
@@ -28,15 +30,15 @@ show_commands() {
     cache:stats Show cache statistics
 
     📦 Package Management
-    package:install <pkg>      Install a package
-    package:installed          List installed packages
-    package:upgrade <pkg>      Upgrade specific package
-    package:remove <pkg>       Remove a package
-    package:find <pkg>         Search for a package
-    package:download <pkg>     Download package source code
-    package:dependencies <pkg> Check package dependencies
-    package:description <pkg>  Show package description
-    package:descriptions       List all packages with descriptions
+    pkg:install [PACKAGE]      Install a package
+    pkg:installed              List installed packages
+    pkg:upgrade [PACKAGE]      Upgrade specific package
+    pkg:remove [PACKAGE]       Remove a package
+    pkg:find [PACKAGE]         Search for a package
+    pkg:download [PACKAGE]     Download package source code
+    pkg:dependencies [PACKAGE] Check package dependencies
+    pkg:description [PACKAGE]  Show package description
+    pkg:descriptions           List all packages with descriptions
 
     🔄 PPA Management
     ppa:list          List configured PPAs
@@ -44,11 +46,24 @@ show_commands() {
     ppa:remove <ppa>  Remove a PPA
 
     💾 Memory Management
-    memory:info     Show memory information
     freemem         Free up memory
-    killport <port> Kill process using a port
 
-    💡 Tip: Replace <pkg> with package name and <ppa> with PPA path
+    📊 Monitoring
+    sys-info        Show system information
+    disk-usage      Show disk usage by partition
+    memory-info     Show detailed memory usage
+
+    🛡️ Security
+    ufw-status       Show UFW status
+    ports-list       List open ports and associated services
+    check-updates    Check for security updates
+    killport <port>  Kill process using a port
+
+    ⚙️ Services
+    service-list          List active services
+    service-restart <srv> Restart a service
+
+    💡 Tip: Replace [PACKAGE] with package name and <ppa> with PPA path
     🔗 Repository: https://github.com/alexperezortuno/ubuntu-updater
 EOF
 }
@@ -56,13 +71,11 @@ EOF
 case "$PARAM_1" in
     -v|--version)
         echo -e "${Yel}Version 1.0.0${RCol}\n";
-        exit 0
     ;;
     "clean")
       echo -e "${Yel}";
       sudo apt autoremove; sudo apt clean; sudo apt autoclean
       echo -e "${RCol}";
-      exit 0
     ;;
     "package:remove")
       if [[ "$PARAM_2" != "" ]]
@@ -71,7 +84,6 @@ case "$PARAM_1" in
         sudo apt remove --purge "$PARAM_2"
         sudo apt autoremove
         sudo apt clean
-        exit 0
       else
         echo -e "${Yel}Please tell me what package you want to remove${RCol}\n";
         exit 1
@@ -79,14 +91,12 @@ case "$PARAM_1" in
     ;;
     "package:install")
       sudo apt install "${PARAM_2}"
-      exit 0
     ;;
     "package:upgrade")
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Installing package ${PARAM_2}${RCol}\n";
         sudo apt install "$PARAM_2" --only-upgrade
-        exit 0
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
         exit 1
@@ -94,14 +104,12 @@ case "$PARAM_1" in
     ;;
     "package:installed")
       sudo apt list --installed | less
-      exit 0
     ;;
     "package:find")
       if [[ "$PARAM_2" != "" ]]
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
         sudo apt list --installed | grep -i "$PARAM_2"
-        exit 0
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
         exit 1
@@ -112,7 +120,6 @@ case "$PARAM_1" in
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
         apt-cache show "$PARAM_2" | less
-        exit 0
       else
         echo -e "${Red}Please tell me what package you need information${RCol}\n";
         exit 1
@@ -123,7 +130,6 @@ case "$PARAM_1" in
       then
         echo -e "${Yel}Finding package ${PARAM_2}${RCol}\n";
         apt-cache search "$PARAM_2" | less
-        exit 0
       else
         echo -e "${Red}Please tell me what package you need to find${RCol}\n";
         exit 1
@@ -133,7 +139,6 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         apt-cache showpkg "$PARAM_2" | less
-        exit 0
       else
         echo -e "${Red}Please tell me what package you need to see${RCol}\n";
         exit 1
@@ -143,7 +148,6 @@ case "$PARAM_1" in
       if [[ "$PARAM_2" != "" ]]
       then
         sudo apt-get --download-only source "$PARAM_2"
-        exit 0
       else
         echo -e "${Red}Please tell me what package needs to download${RCol}\n";
         exit 1
@@ -151,18 +155,15 @@ case "$PARAM_1" in
     ;;
     "package:list")
       dpkg --list
-      exit 0
     ;;
     "ppa:list")
       apt policy
-      exit 0
     ;;
     "ppa:install")
         if [[ "$PARAM_2" != "" ]]
         then
             sudo add-apt-repository ppa:"$PARAM_2" -y
             sudo apt update
-            exit 0
         else
             echo -e "${Red}Please need a PPA ${RCol}\n";
             exit 1
@@ -173,7 +174,6 @@ case "$PARAM_1" in
         then
             sudo add-apt-repository --remove ppa:"$PARAM_2" -y
             sudo apt update
-            exit 0
         else
             echo -e "${Red}Please tell me what ppa needs remove${RCol}\n";
             exit 1
@@ -181,7 +181,6 @@ case "$PARAM_1" in
     ;;
     "cache:stats")
       apt-cache stats
-      exit 0
     ;;
     "memory:info")
       if [[ "$PARAM_2" != "" ]]
@@ -192,28 +191,71 @@ case "$PARAM_1" in
         # sudo lshw -short -C memory
         sudo dmidecode --type 17  | grep -i speed
       fi
-      exit 0
     ;;
     "killport")
         echo -e "${Yel}Please write port to kill:  ${RCol}\r"
         read -r PORT
         sudo kill -9 "$(sudo lsof -t -i:"${PORT}")"
-        exit 0
     ;;
     "freemem")
         free -h
         su -c "echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'" root
         # echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'
         free -h
-        exit 0
+    ;;
+    "fix-broken")
+      echo -e "${Gre}Fixing broken packages...${RCol}"
+      sudo apt --fix-broken install
+    ;;
+    "kernel-clean")
+      echo -e "${Gre}Cleaning old kernels...${RCol}"
+      sudo apt purge $(dpkg -l | awk '/^ii linux-image-*/{print $2}' | grep -v $(uname -r))
+    ;;
+    "repo-check")
+      echo -e "${Gre}Checking repository sources...${RCol}"
+      sudo apt update 2>&1 | grep -i "failed\|error"
+    ;;
+    "pkg-search")
+      [ -z "$2" ] && echo -e "${Red}Error: Package name required${RCol}" && exit 1
+      apt search "$2"
+    ;;
+    "sys-info")
+      echo -e "${Gre}System Information:${RCol}"
+      echo -e "Hostname: $(hostname)"
+      echo -e "Uptime: $(uptime -p)"
+      echo -e "OS: $(lsb_release -d | cut -f2-)"
+      echo -e "Kernel: $(uname -r)"
+      echo -e "CPU: $(lscpu | grep 'Model name' | cut -d':' -f2 | xargs)"
+    ;;
+    "service-list")
+      systemctl list-unit-files --type=service --state=enabled
+    ;;
+    "service-restart")
+      [ -z "$2" ] && echo -e "${Red}Error: Service name required${RCol}" && exit 1
+      sudo systemctl restart "$2"
+    ;;
+    "ufw-status")
+      sudo ufw status verbose
+    ;;
+    "ports-list")
+      sudo ss -tulnp
+    ;;
+    "disk-usage")
+      df -h
+    ;;
+    "memory-info")
+      echo -e "${Gre}Memory Information:${RCol}"
+      echo -e "Total Memory: $(free -h | grep 'Mem' | awk '{print $2}')"
+      echo -e "Used Memory: $(free -h | grep 'Mem' | awk '{print $3}')"
+      echo -e "Free Memory: $(free -h | grep 'Mem' | awk '{print $4}')"
     ;;
     -h|--help)
         show_commands
-        exit 0
     ;;
     *)
       echo -e "${Yel} Updating packages ${RCol}";
       sudo apt update; apt list --upgradable && sudo apt upgrade -y && sudo apt autoremove; sudo apt clean; sudo apt autoclean
-      exit 0
     ;;
 esac
+
+exit 0

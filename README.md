@@ -16,8 +16,7 @@ $ ./install
 $ updater -h
 ```
 
-## Ubuntu/Debian Updater 🔹
-
+## 🔹 Ubuntu/Debian Updater 🔹
     Automates system updates, upgrades, and cleanup tasks.
 
     📌 Usage:
@@ -36,15 +35,15 @@ $ updater -h
     cache:stats Show cache statistics
 
     📦 Package Management
-    package:install <pkg>      Install a package
-    package:installed          List installed packages
-    package:upgrade <pkg>      Upgrade specific package
-    package:remove <pkg>       Remove a package
-    package:find <pkg>         Search for a package
-    package:download <pkg>     Download package source code
-    package:dependencies <pkg> Check package dependencies
-    package:description <pkg>  Show package description
-    package:descriptions       List all packages with descriptions
+    pkg:install [PACKAGE]      Install a package
+    pkg:installed              List installed packages
+    pkg:upgrade [PACKAGE]      Upgrade specific package
+    pkg:remove [PACKAGE]       Remove a package
+    pkg:find [PACKAGE]         Search for a package
+    pkg:download [PACKAGE]     Download package source code
+    pkg:dependencies [PACKAGE] Check package dependencies
+    pkg:description [PACKAGE]  Show package description
+    pkg:descriptions           List all packages with descriptions
 
     🔄 PPA Management
     ppa:list          List configured PPAs
@@ -52,8 +51,21 @@ $ updater -h
     ppa:remove <ppa>  Remove a PPA
 
     💾 Memory Management
-    memory:info     Show memory information
     freemem         Free up memory
-    killport <port> Kill process using a port
 
-    💡 Tip: Replace <pkg> with package name and <ppa> with PPA path
+    📊 Monitoring
+    sys-info        Show system information
+    disk-usage      Show disk usage by partition
+    memory-info     Show detailed memory usage
+
+    🛡️ Security
+    ufw-status       Show UFW status
+    ports-list       List open ports and associated services
+    check-updates    Check for security updates
+    killport <port>  Kill process using a port
+
+    ⚙️ Services
+    service-list          List active services
+    service-restart <srv> Restart a service
+
+    💡 Tip: Replace [PACKAGE] with package name and <ppa> with PPA path
